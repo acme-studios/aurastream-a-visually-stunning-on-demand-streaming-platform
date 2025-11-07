@@ -1,12 +1,33 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { PlayCircle, Clapperboard } from 'lucide-react';
-import { mockVideos } from '@/lib/mock-data';
+import { motion, Variants } from 'framer-motion';
+import { PlayCircle, Clapperboard, Loader2 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { Skeleton } from '@/components/ui/skeleton';
+import { api } from '@/lib/api-client';
+import type { Video } from '@shared/types';
 export function HomePage() {
-  const cardVariants = {
+  const [videos, setVideos] = useState<Video[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  useEffect(() => {
+    const fetchVideos = async () => {
+      try {
+        setLoading(true);
+        const data = await api<Video[]>('/api/videos');
+        setVideos(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to fetch videos.');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchVideos();
+  }, []);
+  const cardVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
     visible: (i: number) => ({
       opacity: 1,
@@ -17,6 +38,58 @@ export function HomePage() {
         ease: "easeOut"
       }
     })
+  };
+  const renderContent = () => {
+    if (loading) {
+      return (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div key={i}>
+              <Skeleton className="w-full aspect-video mb-4" />
+              <Skeleton className="h-6 w-3/4 mb-2" />
+              <Skeleton className="h-4 w-full" />
+            </div>
+          ))}
+        </div>
+      );
+    }
+    if (error) {
+      return <div className="text-center text-destructive py-10">{error}</div>;
+    }
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        {videos.map((video, i) => (
+          <motion.div
+            key={video.id}
+            custom={i}
+            initial="hidden"
+            animate="visible"
+            variants={cardVariants}
+          >
+            <Link to={`/watch/${video.id}`} className="block group">
+              <Card className="overflow-hidden h-full flex flex-col transition-all duration-300 ease-in-out hover:shadow-xl hover:shadow-indigo-500/10 hover:-translate-y-1 hover:border-indigo-500/50 animate-border-glow">
+                <div className="relative">
+                  <AspectRatio ratio={16 / 9}>
+                    <img
+                      src={video.thumbnailUrl}
+                      alt={video.title}
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  </AspectRatio>
+                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center">
+                    <PlayCircle className="w-16 h-16 text-white/70 group-hover:text-white group-hover:scale-110 transition-all duration-300" />
+                  </div>
+                </div>
+                <CardContent className="p-4 flex-grow">
+                  <h3 className="text-lg font-semibold leading-tight text-foreground group-hover:text-indigo-400 transition-colors duration-200">{video.title}</h3>
+                  <p className="text-sm text-muted-foreground mt-2 line-clamp-2">{video.description}</p>
+                </CardContent>
+              </Card>
+            </Link>
+          </motion.div>
+        ))}
+      </div>
+    );
   };
   return (
     <div className="bg-background text-foreground min-h-screen">
@@ -45,41 +118,10 @@ export function HomePage() {
           </motion.p>
         </header>
         <main className="pb-16 md:pb-24">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {mockVideos.map((video, i) => (
-              <motion.div
-                key={video.id}
-                custom={i}
-                initial="hidden"
-                animate="visible"
-                variants={cardVariants}
-              >
-                <Link to={`/watch/${video.id}`} className="block group">
-                  <Card className="overflow-hidden h-full flex flex-col transition-all duration-300 ease-in-out hover:shadow-xl hover:shadow-indigo-500/10 hover:-translate-y-1 hover:border-indigo-500/50 animate-border-glow">
-                    <div className="relative">
-                      <AspectRatio ratio={16 / 9}>
-                        <img
-                          src={video.thumbnailUrl}
-                          alt={video.title}
-                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                        />
-                      </AspectRatio>
-                      <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center">
-                        <PlayCircle className="w-16 h-16 text-white/70 group-hover:text-white group-hover:scale-110 transition-all duration-300" />
-                      </div>
-                    </div>
-                    <CardContent className="p-4 flex-grow">
-                      <h3 className="text-lg font-semibold leading-tight text-foreground group-hover:text-indigo-400 transition-colors duration-200">{video.title}</h3>
-                      <p className="text-sm text-muted-foreground mt-2 line-clamp-2">{video.description}</p>
-                    </CardContent>
-                  </Card>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
+          {renderContent()}
         </main>
         <footer className="text-center py-8 border-t">
-            <p className="text-muted-foreground">Built with ❤️ at Cloudflare</p>
+            <p className="text-muted-foreground">Built with ��️ at Cloudflare</p>
         </footer>
       </div>
     </div>
