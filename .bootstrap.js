@@ -78,7 +78,8 @@ function updateWranglerJsonc() {
 
 function runSetupCommands() {
     const commands = [
-    "bun add @cloudflare/stream-react@^1.1.0"
+    "bun add @cloudflare/stream-react@^1.1.0",
+    "bun install @cloudflare/stream-react"
 ];
     
     if (commands.length === 0) {
