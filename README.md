@@ -1,6 +1,6 @@
 # AuraStream: A Visually Stunning On-Demand Streaming Platform
 
-[cloudflarebutton]
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/acme-studios/aurastream-a-visually-stunning-on-demand-streaming-platform)
 
 AuraStream is a minimalist, high-performance, and visually breathtaking on-demand video streaming application. Built entirely on the Cloudflare ecosystem, it leverages Cloudflare Stream for video hosting and delivery, ensuring a seamless, buffer-free viewing experience for users worldwide. The application features a clean, intuitive interface designed with a 'less is more' philosophy, focusing on content discovery and an immersive playback experience.
 
@@ -97,7 +97,7 @@ This application is designed to be deployed to the Cloudflare ecosystem.
 
 Alternatively, you can deploy your own version of AuraStream with a single click.
 
-[cloudflarebutton]
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/acme-studios/aurastream-a-visually-stunning-on-demand-streaming-platform)
 
 ## Implementation Roadmap
 
