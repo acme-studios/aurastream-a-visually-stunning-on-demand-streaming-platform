@@ -146,6 +146,7 @@ export default {
   			soft: '0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)',
   			glow: '0 0 20px -5px rgba(99, 102, 241, 0.4)',
   			'glow-lg': '0 0 40px -10px rgba(99, 102, 241, 0.3)',
+  			'glow-indigo': '0 0 15px -2px rgba(79, 70, 229, 0.4)',
   			primary: '0 0 20px -5px hsl(var(--primary) / 0.4)',
   			glass: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'
   		},
@@ -196,6 +197,10 @@ export default {
   					boxShadow: '0 0 40px -5px rgba(99, 102, 241, 0.6)'
   				}
   			},
+        'border-glow': {
+          '0%': { 'box-shadow': '0 0 0px 0px hsl(var(--primary) / 0.2)' },
+          '100%': { 'box-shadow': '0 0 20px 4px hsl(var(--primary) / 0.0)' },
+        },
   			float: {
   				'0%, 100%': {
   					transform: 'translateY(0px)'
@@ -227,6 +232,7 @@ export default {
   			'scale-in': 'scale-in 0.3s ease-out',
   			shimmer: 'shimmer 2s infinite',
   			glow: 'glow 2s ease-in-out infinite',
+        'border-glow': 'border-glow 1.5s ease-out infinite',
   			float: 'float 3s ease-in-out infinite',
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out'

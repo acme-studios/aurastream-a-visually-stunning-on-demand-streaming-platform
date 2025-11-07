@@ -1,4 +1,4 @@
-import { Stream } from '@cloudflare/stream-react';
+import Stream from '@cloudflare/stream-react';
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 interface VideoPlayerProps {
   streamId: string;
